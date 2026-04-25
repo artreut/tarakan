@@ -12,7 +12,7 @@
       --grey: #A8A8A8;
       --accent: #4c4c4c;
       --w15: rgba(255,255,255,0.15);
-      --strip: 80px; /* vertical title strip width on mobile */
+      --strip: 80px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,12 +24,6 @@
       overflow-x: hidden;
     }
 
-    /* ══════════════════════════════════════════
-       VIDEO BACKGROUND
-       Always fixed behind everything.
-       Desktop: covers full screen.
-       Mobile: covers full screen behind strip + content.
-    ══════════════════════════════════════════ */
     #bg-video {
       position: fixed;
       inset: 0;
@@ -49,7 +43,6 @@
     }
     @media (max-width: 640px) {
       #bg-video video {
-        /* Scale down so cockroach fits nicely, not zoomed in */
         object-fit: contain;
         object-position: center top;
         transform: scale(2.0);
@@ -57,9 +50,6 @@
       }
     }
 
-    /* ══════════════════════════════════════════
-       NAV
-    ══════════════════════════════════════════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -71,11 +61,7 @@
       background: var(--black);
       border-bottom: 1px solid var(--w15);
     }
-    .logo-link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
+    .logo-link { display: flex; align-items: center; text-decoration: none; }
     .logo-svg { height: clamp(24px,2.5vw,36px); width: auto; display: block; }
     .menu-btn {
       display: flex; align-items: center; gap: 10px;
@@ -86,373 +72,132 @@
     .burger { display: flex; flex-direction: column; gap: 6px; width: clamp(20px,2vw,32px); }
     .burger span { display: block; height: 2px; background: var(--white); border-radius: 2px; }
 
-    /* ══════════════════════════════════════════
-       MAIN CONTENT
-    ══════════════════════════════════════════ */
     main { position: relative; z-index: 10; }
 
-    /* ══════════════════════════════════════════
-       DESKTOP HERO
-    ══════════════════════════════════════════ */
-    #hero {
-      height: 100vh;
-      min-height: 500px;
-      position: relative;
-      overflow: hidden;
-    }
+    #hero { height: 100vh; min-height: 500px; position: relative; overflow: hidden; }
     .vtitle-wrap {
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
+      position: absolute; left: 0; top: 0; bottom: 0;
       width: clamp(52px,8vw,130px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-      z-index: 5;
-      pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      overflow: visible; z-index: 5; pointer-events: none;
     }
     .vtitle {
-      white-space: nowrap;
-      font-weight: 700;
-      font-size: clamp(60px,13vw,220px);
-      letter-spacing: -0.06em;
-      line-height: 0.9;
-      color: var(--white);
-      user-select: none;
+      white-space: nowrap; font-weight: 700;
+      font-size: clamp(60px,13vw,220px); letter-spacing: -0.06em;
+      line-height: 0.9; color: var(--white); user-select: none;
       transform: rotate(-90deg);
     }
     .hero-tagline {
-      position: absolute;
-      right: clamp(20px,4vw,100px);
+      position: absolute; right: clamp(20px,4vw,100px);
       bottom: clamp(100px,12vh,160px);
-      font-size: clamp(14px,2.4vw,50px);
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      text-align: right;
-      line-height: 1.2;
-      max-width: calc(100vw - clamp(52px,8vw,130px) - 40px);
-      z-index: 5;
+      font-size: clamp(14px,2.4vw,50px); font-weight: 300;
+      letter-spacing: -0.02em; text-align: right; line-height: 1.2;
+      max-width: calc(100vw - clamp(52px,8vw,130px) - 40px); z-index: 5;
     }
     .hero-tagline .dim { color: var(--accent); }
     .sub-nav {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      display: flex;
-      border-top: 1px solid var(--w15);
-      z-index: 5;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; border-top: 1px solid var(--w15); z-index: 5;
       margin-left: clamp(52px,8vw,130px);
     }
     .sub-nav-item {
-      flex: 1;
-      padding: clamp(13px,1.8vw,38px) clamp(12px,1.5vw,24px);
-      font-size: clamp(12px,1vw,18px);
-      color: var(--white);
-      border-right: 1px solid var(--w15);
-      cursor: pointer;
-      transition: opacity 0.25s;
+      flex: 1; padding: clamp(13px,1.8vw,38px) clamp(12px,1.5vw,24px);
+      font-size: clamp(12px,1vw,18px); color: var(--white);
+      border-right: 1px solid var(--w15); cursor: pointer; transition: opacity 0.25s;
     }
     .sub-nav-item:last-child { border-right: none; }
     .sub-nav-item:hover { opacity: 0.5; }
 
-    /* ══════════════════════════════════════════
-       ABOUT (desktop)
-    ══════════════════════════════════════════ */
-    #about {
-      padding: clamp(60px,8vw,140px) clamp(20px,4vw,100px);
-      padding-left: clamp(52px,8vw,130px);
-    }
+    #about { padding: clamp(60px,8vw,140px) clamp(20px,4vw,100px); padding-left: clamp(52px,8vw,130px); }
     .about-headline {
-      font-size: clamp(22px,3.8vw,70px);
-      font-weight: 300;
-      line-height: 1.08;
-      margin-bottom: clamp(28px,4vw,90px);
-      margin-left: auto;
-      max-width: 720px;
+      font-size: clamp(22px,3.8vw,70px); font-weight: 300; line-height: 1.08;
+      margin-bottom: clamp(28px,4vw,90px); margin-left: auto; max-width: 720px;
     }
-    .about-body {
-      display: flex;
-      gap: clamp(14px,2vw,36px);
-      flex-wrap: wrap;
-      align-items: flex-start;
-    }
-    .about-label {
-      font-size: clamp(11px,0.85vw,15px);
-      color: var(--grey);
-      flex-shrink: 0;
-      padding-top: 4px;
-      white-space: nowrap;
-    }
-    .about-text {
-      font-size: clamp(13px,1.2vw,22px);
-      font-weight: 300;
-      line-height: 1.65;
-      flex: 1;
-      min-width: 0;
-    }
-    .about-roach-img {
-      width: clamp(100px,12vw,260px);
-      height: auto;
-      mix-blend-mode: screen;
-      flex-shrink: 0;
-    }
+    .about-body { display: flex; gap: clamp(14px,2vw,36px); flex-wrap: wrap; align-items: flex-start; }
+    .about-label { font-size: clamp(11px,0.85vw,15px); color: var(--grey); flex-shrink: 0; padding-top: 4px; white-space: nowrap; }
+    .about-text { font-size: clamp(13px,1.2vw,22px); font-weight: 300; line-height: 1.65; flex: 1; min-width: 0; }
+    .about-roach-img { width: clamp(100px,12vw,260px); height: auto; mix-blend-mode: screen; flex-shrink: 0; }
 
-    /* ══════════════════════════════════════════
-       HISTORY (desktop)
-    ══════════════════════════════════════════ */
     #history { border-top: 1px solid var(--w15); }
     .history-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: clamp(14px,2.5vw,48px) clamp(16px,3vw,80px);
       padding-left: clamp(52px,8vw,130px);
-      border-bottom: 1px solid var(--w15);
-      transition: opacity 0.25s;
+      border-bottom: 1px solid var(--w15); transition: opacity 0.25s;
     }
     .history-row:hover { opacity: 0.6; }
-    .history-year {
-      font-size: clamp(22px,3vw,56px);
-      font-weight: 300;
-      flex-shrink: 0;
-      min-width: clamp(52px,7vw,120px);
-    }
-    .history-desc {
-      font-size: clamp(10px,0.75vw,13px);
-      color: var(--white);
-      text-align: center;
-      flex: 1;
-      padding: 0 6px;
-      line-height: 1.7;
-      opacity: 0.7;
-    }
-    .history-milestone {
-      font-size: clamp(13px,1.9vw,40px);
-      font-weight: 300;
-      text-align: right;
-      flex-shrink: 0;
-    }
+    .history-year { font-size: clamp(22px,3vw,56px); font-weight: 300; flex-shrink: 0; min-width: clamp(52px,7vw,120px); }
+    .history-desc { font-size: clamp(10px,0.75vw,13px); color: var(--white); text-align: center; flex: 1; padding: 0 6px; line-height: 1.7; opacity: 0.7; }
+    .history-milestone { font-size: clamp(13px,1.9vw,40px); font-weight: 300; text-align: right; flex-shrink: 0; }
 
-    /* ══════════════════════════════════════════
-       TESTIMONIALS (desktop)
-    ══════════════════════════════════════════ */
-    #testimonials {
-      padding: clamp(40px,5vw,120px) clamp(16px,3.5vw,90px);
-      padding-left: clamp(52px,8vw,130px);
-    }
+    #testimonials { padding: clamp(40px,5vw,120px) clamp(16px,3.5vw,90px); padding-left: clamp(52px,8vw,130px); }
     .testimonial-item {
-      padding: clamp(28px,4vw,80px) 0;
-      border-top: 1px solid var(--w15);
-      display: flex;
-      gap: clamp(12px,1.8vw,40px);
-      align-items: flex-start;
+      padding: clamp(28px,4vw,80px) 0; border-top: 1px solid var(--w15);
+      display: flex; gap: clamp(12px,1.8vw,40px); align-items: flex-start;
     }
     .testimonial-item:last-child { border-bottom: 1px solid var(--w15); }
-    .quote-mark {
-      font-size: clamp(26px,4vw,64px);
-      font-weight: 700;
-      color: var(--white);
-      flex-shrink: 0;
-      transform: rotate(180deg);
-      display: inline-block;
-      line-height: 1;
-    }
-    .testimonial-text {
-      font-size: clamp(14px,2vw,44px);
-      font-weight: 300;
-      line-height: 1.2;
-      margin-bottom: clamp(10px,1.5vw,28px);
-    }
-    .testimonial-author {
-      font-size: clamp(11px,0.85vw,16px);
-      color: var(--white);
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .testimonial-role {
-      font-size: clamp(11px,0.85vw,16px);
-      color: var(--grey);
-    }
+    .quote-mark { font-size: clamp(26px,4vw,64px); font-weight: 700; color: var(--white); flex-shrink: 0; transform: rotate(180deg); display: inline-block; line-height: 1; }
+    .testimonial-text { font-size: clamp(14px,2vw,44px); font-weight: 300; line-height: 1.2; margin-bottom: clamp(10px,1.5vw,28px); }
+    .testimonial-author { font-size: clamp(11px,0.85vw,16px); color: var(--white); font-weight: 600; margin-bottom: 2px; }
+    .testimonial-role { font-size: clamp(11px,0.85vw,16px); color: var(--grey); }
 
     footer {
-      height: clamp(44px,6vh,80px);
-      border-top: 1px solid var(--w15);
+      height: clamp(44px,6vh,80px); border-top: 1px solid var(--w15);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: var(--grey); letter-spacing: 0.04em;
-      padding: 0 16px; text-align: center;
+      font-size: 11px; color: var(--grey); letter-spacing: 0.04em; padding: 0 16px; text-align: center;
     }
 
-    /* ══════════════════════════════════════════
-       SCROLL REVEAL
-    ══════════════════════════════════════════ */
-    .reveal {
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ══════════════════════════════════════════
-       ███ MOBILE ≤640px ███
-       Layout per Figma screenshots:
-       - Fixed vertical "тараканы" strip on left
-       - Fixed video bg behind everything
-       - Content scrolls over video
-    ══════════════════════════════════════════ */
     @media (max-width: 640px) {
-
-      /* Fixed vertical title on left edge */
       .vtitle-wrap {
-        position: fixed;
-        left: 0; top: 0; bottom: 0;
-        width: var(--strip);
-        z-index: 400;
+        position: fixed; left: 0; top: 0; bottom: 0;
+        width: var(--strip); z-index: 400;
         background: var(--black);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        border-right: 1px solid var(--w15);
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden; border-right: 1px solid var(--w15);
       }
-      .vtitle {
-        font-size: clamp(56px,16vw,90px);
-        transform: rotate(-90deg);
-        white-space: nowrap;
-      }
-
-      /* Nav shifts right of strip */
+      .vtitle { font-size: clamp(56px,16vw,90px); transform: rotate(-90deg); white-space: nowrap; }
       nav { left: var(--strip); }
-
-      /* All main content shifts right of strip */
       main { margin-left: var(--strip); }
-
-      /* ── Mobile Hero ── */
-      #hero {
-        height: 100svh;
-        min-height: 500px;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      }
-
-      /* Tagline: large, bottom-left of hero */
+      #hero { height: 100svh; min-height: 500px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
       .hero-tagline {
-        position: absolute;
-        left: 20px;
-        right: 20px;
-        bottom: clamp(90px,14vh,140px);
-        top: auto;
-        font-size: clamp(28px,8vw,44px);
-        font-weight: 300;
-        text-align: left;
-        line-height: 1.1;
-        max-width: none;
-        letter-spacing: -0.03em;
+        position: absolute; left: 20px; right: 20px;
+        bottom: clamp(90px,14vh,140px); top: auto;
+        font-size: clamp(28px,8vw,44px); font-weight: 300;
+        text-align: left; line-height: 1.1; max-width: none; letter-spacing: -0.03em;
       }
-
-      /* Sub-nav: horizontal 3 cols at bottom */
-      .sub-nav {
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        margin-left: 0;
-        display: flex;
-        border-top: 1px solid var(--w15);
-      }
-      .sub-nav-item {
-        flex: 1;
-        padding: 16px 12px;
-        font-size: 13px;
-        text-align: left;
-        border-right: 1px solid var(--w15);
-      }
+      .sub-nav { position: absolute; bottom: 0; left: 0; right: 0; margin-left: 0; display: flex; border-top: 1px solid var(--w15); }
+      .sub-nav-item { flex: 1; padding: 16px 12px; font-size: 13px; text-align: left; border-right: 1px solid var(--w15); }
       .sub-nav-item:last-child { border-right: none; }
-
-      /* ── Mobile About ── */
-      #about {
-        padding: 40px 20px;
-      }
-      .about-headline {
-        font-size: clamp(26px,7.5vw,38px);
-        margin-left: 0;
-        max-width: none;
-        margin-bottom: 28px;
-        font-weight: 300;
-        line-height: 1.08;
-      }
+      #about { padding: 40px 20px; }
+      .about-headline { font-size: clamp(26px,7.5vw,38px); margin-left: 0; max-width: none; margin-bottom: 28px; font-weight: 300; line-height: 1.08; }
       .about-body { flex-direction: column; gap: 12px; }
       .about-label { font-size: 10px; color: var(--grey); }
       .about-text { font-size: 13px; line-height: 1.65; max-width: 320px; }
-      .about-roach-img {
-        display: block !important;
-        width: 80px;
-        mix-blend-mode: screen;
-      }
-
-      /* ── Mobile History ──
-         Per screenshots: year left, desc center (small), milestone right
-         Two visible columns: year + desc merged left, milestone right
-      ── */
+      .about-roach-img { display: block !important; width: 80px; mix-blend-mode: screen; }
       #history { border-top: 1px solid var(--w15); }
-      .history-row {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: start;
-        gap: 8px;
-        padding: 16px 20px;
-      }
-      .history-year {
-        font-size: 19px;
-        font-weight: 300;
-        min-width: 44px;
-        padding-top: 2px;
-      }
-      .history-desc {
-        display: block;
-        font-size: 10px;
-        line-height: 1.55;
-        opacity: 0.8;
-        text-align: left;
-        padding: 2px 4px 0;
-        flex: unset;
-      }
-      .history-milestone {
-        font-size: 13px;
-        line-height: 1.3;
-        text-align: right;
-        padding-top: 2px;
-        max-width: 120px;
-      }
-
-      /* ── Mobile Testimonials ── */
+      .history-row { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 8px; padding: 16px 20px; }
+      .history-year { font-size: 19px; font-weight: 300; min-width: 44px; padding-top: 2px; }
+      .history-desc { display: block; font-size: 10px; line-height: 1.55; opacity: 0.8; text-align: left; padding: 2px 4px 0; flex: unset; }
+      .history-milestone { font-size: 13px; line-height: 1.3; text-align: right; padding-top: 2px; max-width: 120px; }
       #testimonials { padding: 0 20px 40px 20px; }
-      .testimonial-item {
-        padding: 32px 0;
-        gap: 14px;
-        border-top: 1px solid var(--w15);
-      }
+      .testimonial-item { padding: 32px 0; gap: 14px; border-top: 1px solid var(--w15); }
       .quote-mark { font-size: 22px; margin-top: 2px; }
-      .testimonial-text {
-        font-size: 18px;
-        line-height: 1.28;
-        margin-bottom: 16px;
-        font-weight: 300;
-      }
+      .testimonial-text { font-size: 18px; line-height: 1.28; margin-bottom: 16px; font-weight: 300; }
       .testimonial-author { font-size: 12px; font-weight: 600; }
       .testimonial-role { font-size: 12px; }
-
       footer { font-size: 10px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══ FIXED BG VIDEO (desktop + mobile) ═══ -->
   <div id="bg-video">
-    <video id="vid" src="таракан (1).mp4" muted playsinline preload="auto"></video>
+    <video id="vid" src="таракан (1).mp4" muted playsinline preload="auto" webkit-playsinline x-webkit-airplay="deny"></video>
   </div>
 
-  <!-- ═══ NAV ═══ -->
   <nav>
     <a class="logo-link" href="#">
       <svg class="logo-svg" viewBox="0 0 179 49" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -467,8 +212,6 @@
   </nav>
 
   <main>
-
-    <!-- HERO -->
     <section id="hero">
       <div class="vtitle-wrap"><span class="vtitle">тараканы</span></div>
       <div class="hero-tagline">Мы — тараканы <span class="dim">digital.</span></div>
@@ -479,75 +222,27 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about">
-      <div class="about-headline reveal">
-        Нас невозможно игнорировать. Мы выживаем в любом рынке.
-      </div>
+      <div class="about-headline reveal">Нас невозможно игнорировать. Мы выживаем в любом рынке.</div>
       <div class="about-body reveal">
         <div class="about-label">Что мы делаем</div>
-        <div class="about-text">
-          Мы создаём цифровые решения, которые невозможно игнорировать, соединяя сильный дизайн и стратегию.
-        </div>
+        <div class="about-text">Мы создаём цифровые решения, которые невозможно игнорировать, соединяя сильный дизайн и стратегию.</div>
         <img class="about-roach-img" src="https://www.figma.com/api/mcp/asset/1caa0053-2185-4bd4-a451-a1a57d675e5a" alt=""/>
       </div>
     </section>
 
-    <!-- HISTORY -->
     <section id="history">
-      <div class="history-row reveal">
-        <div class="history-year">2014</div>
-        <div class="history-desc">Никто не звал. Просто появились там, где другие не выживают.</div>
-        <div class="history-milestone">Завелись</div>
-      </div>
-      <div class="history-row reveal">
-        <div class="history-year">2018</div>
-        <div class="history-desc">Пока студии играли в тренды — мы учились жить в любом рынке.</div>
-        <div class="history-milestone">Адаптировались</div>
-      </div>
-      <div class="history-row reveal">
-        <div class="history-year">2020</div>
-        <div class="history-desc">Один проект → десять → сотни. Нас стало невозможно контролировать.</div>
-        <div class="history-milestone">Размножились</div>
-      </div>
-      <div class="history-row reveal">
-        <div class="history-year">2022</div>
-        <div class="history-desc">Когда все ушли в онлайн — мы уже были внутри.</div>
-        <div class="history-milestone">Захватили digital</div>
-      </div>
-      <div class="history-row reveal">
-        <div class="history-year">2026</div>
-        <div class="history-desc">Нас пытались игнорировать. Блокировать. Копировать. Не вышло.</div>
-        <div class="history-milestone">Невозможно уничтожить</div>
-      </div>
+      <div class="history-row reveal"><div class="history-year">2014</div><div class="history-desc">Никто не звал. Просто появились там, где другие не выживают.</div><div class="history-milestone">Завелись</div></div>
+      <div class="history-row reveal"><div class="history-year">2018</div><div class="history-desc">Пока студии играли в тренды — мы учились жить в любом рынке.</div><div class="history-milestone">Адаптировались</div></div>
+      <div class="history-row reveal"><div class="history-year">2020</div><div class="history-desc">Один проект → десять → сотни. Нас стало невозможно контролировать.</div><div class="history-milestone">Размножились</div></div>
+      <div class="history-row reveal"><div class="history-year">2022</div><div class="history-desc">Когда все ушли в онлайн — мы уже были внутри.</div><div class="history-milestone">Захватили digital</div></div>
+      <div class="history-row reveal"><div class="history-year">2026</div><div class="history-desc">Нас пытались игнорировать. Блокировать. Копировать. Не вышло.</div><div class="history-milestone">Невозможно уничтожить</div></div>
     </section>
 
-    <!-- TESTIMONIALS -->
     <section id="testimonials">
-      <div class="testimonial-item reveal">
-        <span class="quote-mark">&#8220;</span>
-        <div>
-          <div class="testimonial-text">Мы хотели просто сайт.<br>Получили внимание, от которого невозможно избавиться.</div>
-          <div class="testimonial-author">Анна Романова</div>
-          <div class="testimonial-role">CEO digital-бренда</div>
-        </div>
-      </div>
-      <div class="testimonial-item reveal">
-        <span class="quote-mark">&#8220;</span>
-        <div>
-          <div class="testimonial-text">Сначала это раздражает.<br>Потом понимаешь — именно так и работает сильный дизайн.</div>
-          <div class="testimonial-author">Максим Левин</div>
-          <div class="testimonial-role">Креативный директор</div>
-        </div>
-      </div>
-      <div class="testimonial-item reveal">
-        <span class="quote-mark">&#8220;</span>
-        <div>
-          <div class="testimonial-text">Они не делают "красиво".<br>Они делают так, что тебя запоминают.</div>
-          <div class="testimonial-author">Андрей Ким</div>
-          <div class="testimonial-role">Основатель бренда</div>
-        </div>
-      </div>
+      <div class="testimonial-item reveal"><span class="quote-mark">&#8220;</span><div><div class="testimonial-text">Мы хотели просто сайт.<br>Получили внимание, от которого невозможно избавиться.</div><div class="testimonial-author">Анна Романова</div><div class="testimonial-role">CEO digital-бренда</div></div></div>
+      <div class="testimonial-item reveal"><span class="quote-mark">&#8220;</span><div><div class="testimonial-text">Сначала это раздражает.<br>Потом понимаешь — именно так и работает сильный дизайн.</div><div class="testimonial-author">Максим Левин</div><div class="testimonial-role">Креативный директор</div></div></div>
+      <div class="testimonial-item reveal"><span class="quote-mark">&#8220;</span><div><div class="testimonial-text">Они не делают "красиво".<br>Они делают так, что тебя запоминают.</div><div class="testimonial-author">Андрей Ким</div><div class="testimonial-role">Основатель бренда</div></div></div>
     </section>
 
     <footer>© тараканы digital — невозможно уничтожить</footer>
@@ -555,27 +250,49 @@
 
   <script>
     /* ══════════════════════════════════════════
-       VIDEO SCRUB — scroll drives currentTime
+       VIDEO SCRUB — iOS Safari compatible
+       iOS Safari requires play() before currentTime
+       can be set. We unlock on first user gesture.
     ══════════════════════════════════════════ */
     const vid = document.getElementById('vid');
-    vid.addEventListener('play', () => vid.pause(), { passive: true });
+    let unlocked = false;
 
     function scrub() {
+      if (!unlocked) return;
       if (!vid.duration || !isFinite(vid.duration)) return;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (max <= 0) return;
-      vid.currentTime = Math.min(window.scrollY / max, 1) * vid.duration;
+      try { vid.currentTime = Math.min(window.scrollY / max, 1) * vid.duration; } catch(e) {}
     }
 
-    vid.addEventListener('loadedmetadata', () => { vid.pause(); scrub(); });
+    function unlock() {
+      if (unlocked) return;
+      const p = vid.play();
+      if (p !== undefined) {
+        p.then(() => { vid.pause(); vid.currentTime = 0; unlocked = true; scrub(); }).catch(() => {});
+      } else {
+        vid.pause(); unlocked = true; scrub();
+      }
+    }
+
+    // Prevent real playback
+    vid.addEventListener('play', () => { if (unlocked) vid.pause(); });
+
+    // Unlock as soon as metadata ready (Android/desktop)
+    vid.addEventListener('loadedmetadata', unlock);
+
+    // Fallback: unlock on first user gesture (iOS)
+    ['touchstart','scroll','click','pointerdown'].forEach(evt => {
+      document.addEventListener(evt, unlock, { once: true, passive: true });
+    });
+
+    vid.load();
 
     let raf;
     window.addEventListener('scroll', () => {
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(scrub);
     }, { passive: true });
-
-    scrub();
 
     /* ══════════════════════════════════════════
        SCROLL REVEAL
