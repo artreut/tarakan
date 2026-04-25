@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>тараканы digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #A8A8A8;
+      --accent: #4c4c4c;
+      --w15: rgba(255,255,255,0.15);
+      --strip: 80px; /* vertical title strip width on mobile */
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════════
+       VIDEO BACKGROUND
+       Always fixed behind everything.
+       Desktop: covers full screen.
+       Mobile: covers full screen behind strip + content.
+    ══════════════════════════════════════════ */
+    #bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    #bg-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      mix-blend-mode: screen;
+      display: block;
+    }
+    @media (max-width: 640px) {
+      #bg-video video {
+        /* Scale down so cockroach fits nicely, not zoomed in */
+        object-fit: contain;
+        object-position: center top;
+        transform: scale(0.85);
+        transform-origin: top center;
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: clamp(12px,1.8vw,28px) clamp(16px,3.5vw,60px);
+      background: var(--black);
+      border-bottom: 1px solid var(--w15);
+    }
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .logo-svg { height: clamp(24px,2.5vw,36px); width: auto; display: block; }
+    .menu-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: none; border: none; cursor: pointer;
+      color: var(--white); font-family: 'Poppins', sans-serif;
+      font-size: clamp(12px,1vw,16px);
+    }
+    .burger { display: flex; flex-direction: column; gap: 6px; width: clamp(20px,2vw,32px); }
+    .burger span { display: block; height: 2px; background: var(--white); border-radius: 2px; }
+
+    /* ══════════════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════════════ */
+    main { position: relative; z-index: 10; }
+
+    /* ══════════════════════════════════════════
+       DESKTOP HERO
+    ══════════════════════════════════════════ */
+    #hero {
+      height: 100vh;
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+    .vtitle-wrap {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: clamp(52px,8vw,130px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .vtitle {
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: clamp(60px,13vw,220px);
+      letter-spacing: -0.06em;
+      line-height: 0.9;
+      color: var(--white);
+      user-select: none;
+      transform: rotate(-90deg);
+    }
+    .hero-tagline {
+      position: absolute;
+      right: clamp(20px,4vw,100px);
+      bottom: clamp(100px,12vh,160px);
+      font-size: clamp(14px,2.4vw,50px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      text-align: right;
+      line-height: 1.2;
+      max-width: calc(100vw - clamp(52px,8vw,130px) - 40px);
+      z-index: 5;
+    }
+    .hero-tagline .dim { color: var(--accent); }
+    .sub-nav {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      border-top: 1px solid var(--w15);
+      z-index: 5;
+      margin-left: clamp(52px,8vw,130px);
+    }
+    .sub-nav-item {
+      flex: 1;
+      padding: clamp(13px,1.8vw,38px) clamp(12px,1.5vw,24px);
+      font-size: clamp(12px,1vw,18px);
+      color: var(--white);
+      border-right: 1px solid var(--w15);
+      cursor: pointer;
+      transition: opacity 0.25s;
+    }
+    .sub-nav-item:last-child { border-right: none; }
+    .sub-nav-item:hover { opacity: 0.5; }
+
+    /* ══════════════════════════════════════════
+       ABOUT (desktop)
+    ══════════════════════════════════════════ */
+    #about {
+      padding: clamp(60px,8vw,140px) clamp(20px,4vw,100px);
+      padding-left: clamp(52px,8vw,130px);
+    }
+    .about-headline {
+      font-size: clamp(22px,3.8vw,70px);
+      font-weight: 300;
+      line-height: 1.08;
+      margin-bottom: clamp(28px,4vw,90px);
+      margin-left: auto;
+      max-width: 720px;
+    }
+    .about-body {
+      display: flex;
+      gap: clamp(14px,2vw,36px);
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .about-label {
+      font-size: clamp(11px,0.85vw,15px);
+      color: var(--grey);
+      flex-shrink: 0;
+      padding-top: 4px;
+      white-space: nowrap;
+    }
+    .about-text {
+      font-size: clamp(13px,1.2vw,22px);
+      font-weight: 300;
+      line-height: 1.65;
+      flex: 1;
+      min-width: 0;
+    }
+    .about-roach-img {
+      width: clamp(100px,12vw,260px);
+      height: auto;
+      mix-blend-mode: screen;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       HISTORY (desktop)
+    ══════════════════════════════════════════ */
+    #history { border-top: 1px solid var(--w15); }
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: clamp(14px,2.5vw,48px) clamp(16px,3vw,80px);
+      padding-left: clamp(52px,8vw,130px);
+      border-bottom: 1px solid var(--w15);
+      transition: opacity 0.25s;
+    }
+    .history-row:hover { opacity: 0.6; }
+    .history-year {
+      font-size: clamp(22px,3vw,56px);
+      font-weight: 300;
+      flex-shrink: 0;
+      min-width: clamp(52px,7vw,120px);
+    }
+    .history-desc {
+      font-size: clamp(10px,0.75vw,13px);
+      color: var(--white);
+      text-align: center;
+      flex: 1;
+      padding: 0 6px;
+      line-height: 1.7;
+      opacity: 0.7;
+    }
+    .history-milestone {
+      font-size: clamp(13px,1.9vw,40px);
+      font-weight: 300;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       TESTIMONIALS (desktop)
+    ══════════════════════════════════════════ */
+    #testimonials {
+      padding: clamp(40px,5vw,120px) clamp(16px,3.5vw,90px);
+      padding-left: clamp(52px,8vw,130px);
+    }
+    .testimonial-item {
+      padding: clamp(28px,4vw,80px) 0;
+      border-top: 1px solid var(--w15);
+      display: flex;
+      gap: clamp(12px,1.8vw,40px);
+      align-items: flex-start;
+    }
+    .testimonial-item:last-child { border-bottom: 1px solid var(--w15); }
+    .quote-mark {
+      font-size: clamp(26px,4vw,64px);
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+      transform: rotate(180deg);
+      display: inline-block;
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-size: clamp(14px,2vw,44px);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: clamp(10px,1.5vw,28px);
+    }
+    .testimonial-author {
+      font-size: clamp(11px,0.85vw,16px);
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .testimonial-role {
+      font-size: clamp(11px,0.85vw,16px);
+      color: var(--grey);
+    }
+
+    footer {
+      height: clamp(44px,6vh,80px);
+      border-top: 1px solid var(--w15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--grey); letter-spacing: 0.04em;
+      padding: 0 16px; text-align: center;
+    }
+
+    /* ══════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════════
+       ███ MOBILE ≤640px ███
+       Layout per Figma screenshots:
+       - Fixed vertical "тараканы" strip on left
+       - Fixed video bg behind everything
+       - Content scrolls over video
+    ══════════════════════════════════════════ */
+    @media (max-width: 640px) {
+
+      /* Fixed vertical title on left edge */
+      .vtitle-wrap {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        width: var(--strip);
+        z-index: 400;
+        background: var(--black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-right: 1px solid var(--w15);
+      }
+      .vtitle {
+        font-size: clamp(56px,16vw,90px);
+        transform: rotate(-90deg);
+        white-space: nowrap;
+      }
+
+      /* Nav shifts right of strip */
+      nav { left: var(--strip); }
+
+      /* All main content shifts right of strip */
+      main { margin-left: var(--strip); }
+
+      /* ── Mobile Hero ── */
+      #hero {
+        height: 100svh;
+        min-height: 500px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      /* Tagline: large, bottom-left of hero */
+      .hero-tagline {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        bottom: clamp(90px,14vh,140px);
+        top: auto;
+        font-size: clamp(28px,8vw,44px);
+        font-weight: 300;
+        text-align: left;
+        line-height: 1.1;
+        max-width: none;
+        letter-spacing: -0.03em;
+      }
+
+      /* Sub-nav: horizontal 3 cols at bottom */
+      .sub-nav {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        margin-left: 0;
+        display: flex;
+        border-top: 1px solid var(--w15);
+      }
+      .sub-nav-item {
+        flex: 1;
+        padding: 16px 12px;
+        font-size: 13px;
+        text-align: left;
+        border-right: 1px solid var(--w15);
+      }
+      .sub-nav-item:last-child { border-right: none; }
+
+      /* ── Mobile About ── */
+      #about {
+        padding: 40px 20px;
+      }
+      .about-headline {
+        font-size: clamp(26px,7.5vw,38px);
+        margin-left: 0;
+        max-width: none;
+        margin-bottom: 28px;
+        font-weight: 300;
+        line-height: 1.08;
+      }
+      .about-body { flex-direction: column; gap: 12px; }
+      .about-label { font-size: 10px; color: var(--grey); }
+      .about-text { font-size: 13px; line-height: 1.65; max-width: 320px; }
+      .about-roach-img {
+        display: block !important;
+        width: 80px;
+        mix-blend-mode: screen;
+      }
+
+      /* ── Mobile History ──
+         Per screenshots: year left, desc center (small), milestone right
+         Two visible columns: year + desc merged left, milestone right
+      ── */
+      #history { border-top: 1px solid var(--w15); }
+      .history-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: start;
+        gap: 8px;
+        padding: 16px 20px;
+      }
+      .history-year {
+        font-size: 19px;
+        font-weight: 300;
+        min-width: 44px;
+        padding-top: 2px;
+      }
+      .history-desc {
+        display: block;
+        font-size: 10px;
+        line-height: 1.55;
+        opacity: 0.8;
+        text-align: left;
+        padding: 2px 4px 0;
+        flex: unset;
+      }
+      .history-milestone {
+        font-size: 13px;
+        line-height: 1.3;
+        text-align: right;
+        padding-top: 2px;
+        max-width: 120px;
+      }
+
+      /* ── Mobile Testimonials ── */
+      #testimonials { padding: 0 20px 40px 20px; }
+      .testimonial-item {
+        padding: 32px 0;
+        gap: 14px;
+        border-top: 1px solid var(--w15);
+      }
+      .quote-mark { font-size: 22px; margin-top: 2px; }
+      .testimonial-text {
+        font-size: 18px;
+        line-height: 1.28;
+        margin-bottom: 16px;
+        font-weight: 300;
+      }
+      .testimonial-author { font-size: 12px; font-weight: 600; }
+      .testimonial-role { font-size: 12px; }
+
+      footer { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ FIXED BG VIDEO (desktop + mobile) ═══ -->
+  <div id="bg-video">
+    <video id="vid" src="таракан.mp4" muted playsinline preload="auto"></video>
+  </div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav>
+    <a class="logo-link" href="#">
+      <svg class="logo-svg" viewBox="0 0 179 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M47.3438 13.8198C46.8767 13.9199 46.4203 14.0643 45.9805 14.2505C45.0034 14.5004 43.3814 15.1233 42.4814 14.6646C40.961 13.8896 39.38 13.2622 37.8164 12.5767C37.3202 12.3593 36.7913 12.0033 36.292 11.8218C35.6594 11.9115 35.2405 11.9909 34.8281 12.5415C34.2513 13.312 33.8025 14.6921 33.2754 15.4292C32.5662 15.4542 31.5435 15.2697 30.8164 15.1802C30.1249 15.0951 29.244 15.0099 28.5732 14.8735C29.0853 13.9024 30.0517 12.1133 30.2061 11.0757C29.6623 9.78833 28.7345 10.3018 28.2139 9.2583C28.1281 9.08662 28.0815 8.65723 28.0527 8.44873C27.9546 8.63193 27.8566 8.88481 27.6416 8.93702C26.8302 9.13351 26.2398 8.04076 26.0127 7.4419C25.9108 7.66573 25.7892 7.9168 25.7021 8.14405C25.4354 7.89032 24.7956 7.26248 24.5303 7.11084C23.4054 6.46816 22.3965 6.34568 21.6729 5.12842C21.3533 4.59081 21.1039 4.04874 20.8643 3.45948C20.8221 3.35604 20.6729 2.88863 20.6494 2.84229C20.5598 2.45572 20.4069 2.13145 20.2979 1.75342C20.1314 1.17654 19.994 0.583785 19.8496 0.000492096C19.7209 1.32129 19.776 1.95086 20.1699 3.23584C20.4412 4.59888 21.2202 5.98097 21.9873 7.12061C22.4443 7.79926 23.6329 8.29107 24.3643 8.66651L26.9453 10.0103C27.3162 10.2021 28.4391 10.8371 28.7422 10.9233L26.7383 13.3091C26.3632 13.7511 25.9971 14.2229 25.5791 14.6216C25.4707 14.725 24.9543 14.792 24.7998 14.7954C22.9906 14.8348 21.194 14.8204 19.3926 15.0444C18.8125 15.1166 18.2309 15.1398 17.6504 15.2466C18.0531 14.6457 18.8795 12.7521 19.1221 12.0396C18.5099 11.3694 18.1388 11.1273 17.1904 11.1333C15.461 11.1444 15.07 10.9875 13.9863 9.66651C14.0517 10.0828 14.0723 10.4295 14.1221 10.8364C13.4891 10.8638 13.1426 10.7919 12.5176 10.6792C12.4444 10.2913 12.0789 9.77992 11.6914 9.82862C11.5959 9.90994 11.5478 9.93184 11.5234 10.0464L11.5605 10.1235C11.8001 10.1554 11.8126 9.96551 11.9658 10.0415C12.0159 10.2094 11.97 10.5037 11.9512 10.6899C11.6989 10.6874 10.677 10.7147 10.458 10.5444C10.284 10.4086 10.3851 10.1796 9.97852 10.1821C9.82161 9.96564 9.66631 9.74775 9.51367 9.52784C9.51111 9.73244 9.48803 10.0426 9.55176 10.2241C9.64884 10.2685 9.70484 10.2703 9.81348 10.2583L9.86914 10.312C9.79994 10.4046 9.75947 10.4708 9.62598 10.4692C8.37301 10.4539 7.19186 10.2887 5.93164 10.4048C5.27786 10.4654 4.00428 9.48221 3.50879 9.09717C2.57134 8.35823 1.74055 7.48146 0.922852 6.60498L0.480469 6.12354C0.326001 5.96349 0.164838 5.81145 0 5.68799C0.228245 6.15925 0.357463 6.37198 0.6875 6.80323C2.04027 8.86765 3.29097 10.2567 5.42383 11.4839C5.64402 11.6103 6.12583 12.1161 6.34961 12.146C7.15323 12.2524 8.01705 12.2081 8.83008 12.2017L12.1729 12.188L15.8066 12.1831C16.3405 12.1836 16.9634 12.2184 17.4814 12.1919C16.9663 13.0005 15.7982 14.896 15.1885 15.519C14.8577 15.8565 12.5797 16.2903 11.8643 16.5308C10.6168 16.95 9.52502 17.2981 8.2998 17.9106C7.83833 18.1416 6.93764 18.663 6.50781 18.8101C5.45271 18.4722 4.13773 17.7371 2.91797 17.3247C3.0154 17.4458 3.12293 17.5823 3.24512 17.6782C4.02861 18.2936 4.79129 18.8666 5.48926 19.5825C5.20231 19.8833 4.62779 20.3086 4.28223 20.6392C3.58205 21.3084 3.14834 21.9467 2.70508 22.6851L2.24805 23.4614C2.19803 23.7858 2.20122 24.0556 2.21973 24.3511L2.24219 24.6587C2.98123 25.8728 4.15455 27.8226 5.51758 28.4478C4.79137 29.3735 3.70352 30.0066 2.83789 30.7681C4.08117 30.5036 5.29311 29.6426 6.46582 29.3687C6.76871 29.2986 8.09838 30.1212 8.52344 30.3179C9.66963 30.8354 10.8495 31.2762 12.0547 31.6372C12.5282 31.7826 14.863 32.3299 15.0703 32.4956C16.0043 33.2511 16.6326 34.9167 17.5225 35.8394C14.2645 36.0285 10.9511 35.852 7.68359 35.897C6.16702 35.9179 6.57973 35.8284 5.37109 36.6587C4.23017 37.4425 3.13437 38.104 2.23633 39.2251C1.91642 39.6054 0.996711 40.6799 0.811523 41.148C0.56689 41.4144 0.166714 42.091 0.0234375 42.4272C0.363019 42.1347 0.84126 41.6312 1.12695 41.2817L1.21777 41.1987C1.33418 41.0818 1.51023 40.8861 1.58594 40.8101C1.96269 40.4301 2.31146 40.018 2.72754 39.6685C3.22194 39.2425 5.08382 37.6545 5.78223 37.7114C7.15103 37.8229 8.578 37.6857 9.98145 37.5884C9.74664 37.7496 9.3751 37.9928 9.55469 38.3315C9.77186 38.3224 10.3437 37.6987 10.5693 37.5034C10.882 37.4557 11.5704 37.4203 11.8818 37.4565C11.9712 37.516 11.9776 37.5515 12.0225 37.648C11.9787 37.9655 11.7184 37.8775 11.5234 38.0942C11.5806 38.2092 11.551 38.1696 11.6797 38.2378C12.076 38.2467 12.4271 37.8041 12.5566 37.4663C13.111 37.3035 13.5209 37.2516 14.0908 37.2573C14.0979 37.6776 14.0584 38.0166 13.9873 38.4253C15.1178 37.1221 15.1028 37.0797 16.9004 36.9995C17.1574 36.988 17.6025 36.9648 17.8564 36.9136C18.5012 36.7835 18.7691 36.4617 19.1133 35.9536C18.7502 35.075 18.1341 33.6554 17.666 32.8286C18.0648 32.9423 18.7915 33.0015 19.2236 33.0474C20.4247 33.173 21.6278 33.2704 22.8359 33.2905C23.5849 33.3041 24.3647 33.2604 25.1094 33.3296C25.6153 33.3766 26.1999 34.152 26.5166 34.5278L27.8486 36.1167C28.1078 36.4271 28.4474 36.863 28.7305 37.1284L28.7715 37.1675C28.0591 37.4594 26.7715 38.2057 26.0283 38.5737C25.032 39.0671 23.8699 39.7026 22.8906 40.1968C21.6634 40.8161 20.5592 43.4245 20.2021 44.7515C19.814 46.1794 19.7155 46.7425 19.832 48.1939C19.8817 48.0361 19.913 47.8598 19.9404 47.6968C20.0933 46.7895 20.4893 45.9529 20.7012 45.063C21.2442 43.7936 21.6529 42.4211 22.9688 41.7466C23.547 41.4502 24.3108 41.2442 24.7861 40.8208C25.1233 40.5204 25.3598 40.2792 25.749 40.022C25.8508 40.2732 25.9722 40.5363 26.082 40.7856C26.3853 39.5266 26.7628 39.1238 28.042 39.1939C27.9985 39.5142 27.8712 39.3722 27.6377 39.5552C27.8602 39.8001 28.1068 39.5862 28.1611 39.3618C28.1758 39.301 28.189 39.2396 28.2012 39.1782C28.204 39.0888 28.2098 38.8092 28.249 38.7427C28.6299 38.0977 29.565 38.0773 29.9961 37.3901C30.1086 37.2107 30.1769 37.0028 30.2461 36.813C29.8315 35.7134 29.1275 34.2805 28.5762 33.2388C29.1532 33.1092 32.9202 32.597 33.2275 32.7105C33.7309 32.8988 34.3483 35.5316 35.417 36.0815C35.6462 36.1995 36.0581 36.3261 36.3086 36.2358C36.941 36.0076 37.5147 35.6573 38.1289 35.3882C39.1378 34.9462 40.1781 34.5607 41.1777 34.1001C41.7034 33.8578 42.2226 33.4679 42.7852 33.3286C43.2076 33.2241 43.7011 33.3022 44.1328 33.3247L44.5723 33.4712C44.9946 33.6057 45.3807 33.709 45.8516 33.8296C46.4409 34.0898 46.6548 34.1276 47.2793 34.2632C46.9562 34.0683 46.507 33.8133 46.207 33.6021L46.0215 33.4907C45.8497 33.3938 45.7049 33.3345 45.4746 33.2622L45.2217 33.1333L45.0674 33.0659C44.2075 32.7306 42.0699 32.4149 41.3164 32.6753C41.019 32.7781 40.2869 33.1381 39.9688 33.2935L37.9111 34.3013C37.5502 34.4795 37.0013 34.7673 36.6309 34.8794C36.3444 34.4936 35.4203 32.5907 35.4658 32.2319C35.7993 31.9818 38.1775 31.4664 39.0049 31.064C37.4532 29.739 36.6851 27.2677 36.5342 25.3003C36.5297 25.2419 36.5269 25.1831 36.5264 25.1245C35.2331 25.066 33.9032 25.065 32.6055 25.0444L27.2344 24.9448C23.946 24.8867 20.5576 24.7624 17.2646 24.6636C16.1795 24.6294 15.0935 24.6107 14.0078 24.606C13.4243 24.6005 12.6092 24.6121 12.043 24.5698C10.9289 24.4429 9.72542 24.4844 8.59766 24.4868C8.62374 24.3511 8.6525 24.1149 8.69141 23.9927C8.74615 23.821 8.68955 23.736 8.71094 23.6548C9.32848 23.5301 10.5308 23.806 11.3203 23.5474L15.25 23.4839C19.1795 23.4116 23.1088 23.3136 27.0371 23.1899C30.1611 23.1164 33.4045 23.1124 36.5195 22.9849C36.7368 20.8746 37.3392 18.4869 39.0029 17.0249C38.307 16.7344 37.5207 16.5258 36.793 16.3198C36.4625 16.2263 35.8019 16.0939 35.5088 15.9595C35.3829 15.5441 36.3312 13.6476 36.582 13.2417C38.1688 13.7718 39.8275 14.8859 41.3613 15.4497C42.1733 15.7482 44.5827 15.3089 45.3828 14.8882C45.7704 14.7654 46.9439 14.0661 47.3438 13.8198ZM50.6406 32.231C51.0038 31.0859 51.0078 29.6112 50.4277 28.5317C49.7795 27.0052 47.8966 25.2945 46.2607 24.9624C46.2592 24.3699 46.247 23.7351 46.2666 23.146C47.894 22.6691 49.3783 21.4889 50.2119 20.0083C50.2587 19.9252 50.3136 19.8061 50.3398 19.7144H50.3408C50.9588 18.5647 51.0465 17.1153 50.6592 15.8784C49.7458 12.9623 47.4402 10.8894 44.8135 9.49561C42.8695 8.48113 40.7854 7.76047 38.6299 7.35596C38.3337 7.29958 37.8508 7.19513 37.5615 7.16651C35.3592 6.76333 33.3787 6.50538 31.1318 6.83252C31.6078 6.95421 32.0853 6.97209 32.541 7.08057C34.1967 7.47563 35.8728 7.58779 37.5391 7.89698C41.6146 8.70087 46.3524 10.3191 48.8096 13.898C50.041 15.6916 50.1227 17.0746 49.7305 19.1382C49.0194 20.8446 47.5143 22.0312 45.7441 22.5093C44.7151 22.117 44.2445 21.7884 43.9404 20.6929C43.565 19.3409 42.3238 17.3615 40.6777 17.8355C39.8967 18.0606 39.1692 18.9312 38.8252 19.6421C37.7213 22.0842 37.5972 24.8468 38.3906 27.4175C39.4052 30.7044 42.1845 31.6253 43.7393 27.9985C43.8867 27.6546 44.0675 26.9323 44.2344 26.6509C44.6879 25.8868 45.854 25.357 46.6582 25.9243C48.2616 26.7469 49.3073 27.608 49.8574 29.3589H49.8584C50.0842 31.5467 49.8343 33.0546 48.3643 34.8159C45.2941 38.4946 40.25 39.8365 35.6895 40.5083C35.5976 40.5219 35.4992 40.5204 35.4102 40.5376C35.2543 40.5491 35.119 40.5623 34.9844 40.5786C34.8498 40.5949 34.7156 40.6147 34.5625 40.6382C34.215 40.6256 32.7083 41.0024 32.2969 41.0698C32.0227 41.1148 31.4072 41.2237 31.1357 41.2905C33.1013 41.5024 34.7814 41.4947 36.7305 41.0601L36.875 41.0542C37.2356 41.0281 37.7434 40.9198 38.0713 40.8599C43.058 39.9489 48.9772 37.4744 50.6406 32.231Z" fill="white"/>
+        <path d="M64.9939 31.0969V21.1676H68.1919V31.0969H64.9939ZM60.9275 23.2403V20.6149H72.2386V23.2403H60.9275ZM75.3517 31.3338C74.0488 31.3338 73.0158 31.0509 72.2525 30.485C71.5023 29.9191 71.1273 29.1558 71.1273 28.1951C71.1273 27.2739 71.4694 26.5369 72.1538 25.9842C72.8381 25.4315 73.8975 25.0696 75.3319 24.8985L80.2078 24.3853V26.1027L76.0426 26.6356C75.4241 26.7146 74.9766 26.8659 74.7003 27.0897C74.4239 27.3002 74.2857 27.6095 74.2857 28.0175C74.2857 28.4254 74.4371 28.7413 74.7397 28.965C75.0556 29.1887 75.5162 29.3006 76.1216 29.3006C76.7532 29.3006 77.2994 29.2084 77.76 29.0242C78.2338 28.8268 78.5957 28.5439 78.8457 28.1754C79.1089 27.8069 79.2405 27.3726 79.2405 26.8725V24.2471C79.2405 23.7075 79.0563 23.2864 78.6878 22.9837C78.3193 22.681 77.76 22.5297 77.0099 22.5297C76.3255 22.5297 75.7662 22.6481 75.3319 22.885C74.9108 23.1219 74.6147 23.4838 74.4436 23.9707L71.4629 23.3785C71.7655 22.4047 72.4104 21.6611 73.3974 21.1479C74.3976 20.6346 75.628 20.378 77.0888 20.378C78.8786 20.378 80.2144 20.7465 81.0961 21.4834C81.9778 22.2073 82.4187 23.2469 82.4187 24.6024V29.1624L83.3267 31.0969H80.0499L79.4379 29.6954H79.3787C79.0102 30.2086 78.4706 30.61 77.76 30.8995C77.0625 31.189 76.2597 31.3338 75.3517 31.3338ZM83.0437 35.045V20.6149H86.064V22.2336H86.1232C86.3601 21.8651 86.6825 21.5427 87.0905 21.2663C87.4984 20.9768 87.9656 20.7596 88.492 20.6149C89.0316 20.457 89.6106 20.378 90.2292 20.378C91.2951 20.378 92.2295 20.6017 93.0323 21.0492C93.835 21.4966 94.4536 22.1283 94.8879 22.9442C95.3353 23.7602 95.559 24.7274 95.559 25.846C95.559 26.9646 95.3353 27.9385 94.8879 28.7676C94.4536 29.5835 93.835 30.2152 93.0323 30.6626C92.2427 31.1101 91.3149 31.3338 90.2489 31.3338C89.6435 31.3338 89.0842 31.2548 88.571 31.0969C88.0577 30.9522 87.6103 30.7482 87.2287 30.485C86.847 30.2218 86.5377 29.9191 86.3009 29.5769H86.2416V35.045H83.0437ZM89.1829 28.965C89.8146 28.965 90.3608 28.84 90.8214 28.5899C91.282 28.3267 91.6373 27.9648 91.8873 27.5042C92.1374 27.0304 92.2624 26.4777 92.2624 25.846C92.2624 25.2143 92.1374 24.6682 91.8873 24.2076C91.6373 23.7338 91.282 23.3719 90.8214 23.1219C90.3608 22.8587 89.8146 22.7271 89.1829 22.7271C88.5381 22.7271 87.9788 22.8587 87.505 23.1219C87.0444 23.3719 86.6891 23.7338 86.439 24.2076C86.189 24.6682 86.064 25.2143 86.064 25.846C86.064 26.4646 86.189 27.0107 86.439 27.4845C86.7023 27.9582 87.0642 28.3267 87.5248 28.5899C87.9985 28.84 88.5512 28.965 89.1829 28.965ZM99.2597 31.3338C97.9568 31.3338 96.9238 31.0509 96.1605 30.485C95.4104 29.9191 95.0353 29.1558 95.0353 28.1951C95.0353 27.2739 95.3775 26.5369 96.0618 25.9842C96.7461 25.4315 97.8055 25.0696 99.24 24.8985L104.116 24.3853V26.1027L99.9506 26.6356C99.3321 26.7146 98.8846 26.8659 98.6083 27.0897C98.3319 27.3002 98.1937 27.6095 98.1937 28.0175C98.1937 28.4254 98.3451 28.7413 98.6477 28.965C98.9636 29.1887 99.4242 29.3006 100.03 29.3006C100.661 29.3006 101.207 29.2084 101.668 29.0242C102.142 28.8268 102.504 28.5439 102.754 28.1754C103.017 27.8069 103.149 27.3726 103.149 26.8725V24.2471C103.149 23.7075 102.964 23.2864 102.596 22.9837C102.227 22.681 101.668 22.5297 100.918 22.5297C100.234 22.5297 99.6742 22.6481 99.24 22.885C98.8188 23.1219 98.5227 23.4838 98.3516 23.9707L95.3709 23.3785C95.6736 22.4047 96.3184 21.6611 97.3054 21.1479C98.3056 20.6346 99.5361 20.378 100.997 20.378C102.787 20.378 104.122 20.7465 105.004 21.4834C105.886 22.2073 106.327 23.2469 106.327 24.6024V29.1624L107.235 31.0969H103.958L103.346 29.6954H103.287C102.918 30.2086 102.379 30.61 101.668 30.8995C100.971 31.189 100.168 31.3338 99.2597 31.3338ZM115.48 31.0969L111.492 25.5302L115.341 20.6149H118.974L113.999 26.458L113.861 23.9312L119.131 31.0969H115.48ZM106.952 31.0969V20.6149H110.15V31.0969H106.952ZM108.294 26.9317V24.1879H113.051V26.9317H108.294ZM122.069 31.3338C120.766 31.3338 119.733 31.0509 118.97 30.485C118.22 29.9191 117.844 29.1558 117.844 28.1951C117.844 27.2739 118.187 26.5369 118.871 25.9842C119.555 25.4315 120.615 25.0696 122.049 24.8985L126.925 24.3853V26.1027L122.76 26.6356C122.141 26.7146 121.694 26.8659 121.417 27.0897C121.141 27.3002 121.003 27.6095 121.003 28.0175C121.003 28.4254 121.154 28.7413 121.457 28.965C121.773 29.1887 122.233 29.3006 122.839 29.3006C123.47 29.3006 124.017 29.2084 124.477 29.0242C124.951 28.8268 125.313 28.5439 125.563 28.1754C125.826 27.8069 125.958 27.3726 125.958 26.8725V24.2471C125.958 23.7075 125.773 23.2864 125.405 22.9837C125.036 22.681 124.477 22.5297 123.727 22.5297C123.043 22.5297 122.483 22.6481 122.049 22.885C121.628 23.1219 121.332 23.4838 121.161 23.9707L118.18 23.3785C118.483 22.4047 119.128 21.6611 120.115 21.1479C121.115 20.6346 122.345 20.378 123.806 20.378C125.596 20.378 126.932 20.7465 127.813 21.4834C128.695 22.2073 129.136 23.2469 129.136 24.6024V29.1624L130.044 31.0969H126.767L126.155 29.6954H126.096C125.727 30.2086 125.188 30.61 124.477 30.8995C123.78 31.189 122.977 31.3338 122.069 31.3338ZM138.151 31.0969V20.6149H141.348V31.0969H138.151ZM129.761 31.0969V20.6149H132.959V31.0969H129.761ZM131.755 26.9515V24.3063H139.335V26.9515H131.755ZM141.782 31.0969V20.6149H144.98V23.6549H148.573C149.915 23.6549 150.975 23.9773 151.751 24.6221C152.528 25.267 152.916 26.1882 152.916 27.3858C152.916 28.5702 152.528 29.4848 151.751 30.1297C150.975 30.7745 149.915 31.0969 148.573 31.0969H141.782ZM144.98 28.8465H147.922C148.514 28.8465 148.948 28.7215 149.224 28.4715C149.514 28.2083 149.659 27.8464 149.659 27.3858C149.659 26.912 149.514 26.5501 149.224 26.3001C148.948 26.05 148.514 25.925 147.922 25.925H144.98V28.8465ZM154.278 31.0969V20.6149H157.476V31.0969H154.278Z" fill="white"/>
+      </svg>
+    </a>
+    <button class="menu-btn">
+      <span>Menu</span>
+      <div class="burger"><span></span><span></span></div>
+    </button>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="vtitle-wrap"><span class="vtitle">тараканы</span></div>
+      <div class="hero-tagline">Мы — тараканы <span class="dim">digital.</span></div>
+      <div class="sub-nav">
+        <div class="sub-nav-item">Услуги</div>
+        <div class="sub-nav-item">Кейсы</div>
+        <div class="sub-nav-item">Тарифы</div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="about-headline reveal">
+        Нас невозможно игнорировать. Мы выживаем в любом рынке.
+      </div>
+      <div class="about-body reveal">
+        <div class="about-label">Что мы делаем</div>
+        <div class="about-text">
+          Мы создаём цифровые решения, которые невозможно игнорировать, соединяя сильный дизайн и стратегию.
+        </div>
+        <img class="about-roach-img" src="https://www.figma.com/api/mcp/asset/1caa0053-2185-4bd4-a451-a1a57d675e5a" alt=""/>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history">
+      <div class="history-row reveal">
+        <div class="history-year">2014</div>
+        <div class="history-desc">Никто не звал. Просто появились там, где другие не выживают.</div>
+        <div class="history-milestone">Завелись</div>
+      </div>
+      <div class="history-row reveal">
+        <div class="history-year">2018</div>
+        <div class="history-desc">Пока студии играли в тренды — мы учились жить в любом рынке.</div>
+        <div class="history-milestone">Адаптировались</div>
+      </div>
+      <div class="history-row reveal">
+        <div class="history-year">2020</div>
+        <div class="history-desc">Один проект → десять → сотни. Нас стало невозможно контролировать.</div>
+        <div class="history-milestone">Размножились</div>
+      </div>
+      <div class="history-row reveal">
+        <div class="history-year">2022</div>
+        <div class="history-desc">Когда все ушли в онлайн — мы уже были внутри.</div>
+        <div class="history-milestone">Захватили digital</div>
+      </div>
+      <div class="history-row reveal">
+        <div class="history-year">2026</div>
+        <div class="history-desc">Нас пытались игнорировать. Блокировать. Копировать. Не вышло.</div>
+        <div class="history-milestone">Невозможно уничтожить</div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="testimonial-item reveal">
+        <span class="quote-mark">&#8220;</span>
+        <div>
+          <div class="testimonial-text">Мы хотели просто сайт.<br>Получили внимание, от которого невозможно избавиться.</div>
+          <div class="testimonial-author">Анна Романова</div>
+          <div class="testimonial-role">CEO digital-бренда</div>
+        </div>
+      </div>
+      <div class="testimonial-item reveal">
+        <span class="quote-mark">&#8220;</span>
+        <div>
+          <div class="testimonial-text">Сначала это раздражает.<br>Потом понимаешь — именно так и работает сильный дизайн.</div>
+          <div class="testimonial-author">Максим Левин</div>
+          <div class="testimonial-role">Креативный директор</div>
+        </div>
+      </div>
+      <div class="testimonial-item reveal">
+        <span class="quote-mark">&#8220;</span>
+        <div>
+          <div class="testimonial-text">Они не делают "красиво".<br>Они делают так, что тебя запоминают.</div>
+          <div class="testimonial-author">Андрей Ким</div>
+          <div class="testimonial-role">Основатель бренда</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>© тараканы digital — невозможно уничтожить</footer>
+  </main>
+
+  <script>
+    /* ══════════════════════════════════════════
+       VIDEO SCRUB — scroll drives currentTime
+    ══════════════════════════════════════════ */
+    const vid = document.getElementById('vid');
+    vid.addEventListener('play', () => vid.pause(), { passive: true });
+
+    function scrub() {
+      if (!vid.duration || !isFinite(vid.duration)) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      vid.currentTime = Math.min(window.scrollY / max, 1) * vid.duration;
+    }
+
+    vid.addEventListener('loadedmetadata', () => { vid.pause(); scrub(); });
+
+    let raf;
+    window.addEventListener('scroll', () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(scrub);
+    }, { passive: true });
+
+    scrub();
+
+    /* ══════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════ */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
