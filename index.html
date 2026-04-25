@@ -12,7 +12,7 @@
       --grey: #A8A8A8;
       --accent: #4c4c4c;
       --w15: rgba(255,255,255,0.15);
-      --strip: 80px;
+      --strip: 50px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,7 +63,7 @@
       border-bottom: 1px solid var(--w15);
     }
     .logo-link { display: flex; align-items: center; text-decoration: none; }
-    .logo-svg { height: clamp(24px,2.5vw,36px); width: auto; display: block; }
+    .logo-svg { height: clamp(44px,2.5vw,36px); width: auto; display: block; }
     .menu-btn {
       display: flex; align-items: center; gap: 10px;
       background: none; border: none; cursor: pointer;
@@ -178,12 +178,12 @@
       .about-label { font-size: 10px; color: var(--grey); }
       .about-text { font-size: 13px; line-height: 1.65; max-width: 320px; }
       .about-roach-img { display: block !important; width: 80px; mix-blend-mode: screen; }
-      #history { border-top: 1px solid var(--w15); }
+      #history { border-top: 1px solid var(--w15); padding: 40px 0px;}
       .history-row { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 8px; padding: 16px 20px; }
       .history-year { font-size: 19px; font-weight: 300; min-width: 44px; padding-top: 2px; }
       .history-desc { display: block; font-size: 10px; line-height: 1.55; opacity: 0.8; text-align: left; padding: 2px 4px 0; flex: unset; }
       .history-milestone { font-size: 13px; line-height: 1.3; text-align: right; padding-top: 2px; max-width: 120px; }
-      #testimonials { padding: 0 20px 40px 20px; }
+      #testimonials { padding: 40px 20px 40px 20px; }
       .testimonial-item { padding: 32px 0; gap: 14px; border-top: 1px solid var(--w15); }
       .quote-mark { font-size: 22px; margin-top: 2px; }
       .testimonial-text { font-size: 18px; line-height: 1.28; margin-bottom: 16px; font-weight: 300; }
